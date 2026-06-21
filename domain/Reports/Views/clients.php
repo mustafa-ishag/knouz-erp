@@ -1,0 +1,9 @@
+<div class="page-header"><div><h1 class="page-title">تقرير العملاء</h1></div><div class="page-actions"><a href="<?= url('reports') ?>" class="btn btn-outline"><i class="fas fa-arrow-right"></i></a></div></div>
+<div class="stats-grid">
+    <div class="stat-card"><div class="stat-icon" style="background:var(--primary-bg);color:var(--gold);"><i class="fas fa-users"></i></div><div class="stat-value"><?= $data['total_clients'] ?></div><div class="stat-title">إجمالي العملاء</div></div>
+</div>
+<div class="grid-2 mt-2">
+    <div class="card"><div class="card-header"><h3>حسب المدينة</h3></div><div class="card-body"><table class="data-table"><thead><tr><th>المدينة</th><th>العدد</th></tr></thead><tbody><?php foreach($data['by_city'] as $c): ?><tr><td><?= clean($c['city']) ?></td><td><span class="badge badge-primary"><?= $c['count'] ?></span></td></tr><?php endforeach; ?></tbody></table></div></div>
+    <div class="card"><div class="card-header"><h3>حسب المصدر</h3></div><div class="card-body"><table class="data-table"><thead><tr><th>المصدر</th><th>العدد</th></tr></thead><tbody><?php $sources=['direct'=>'مباشر','referral'=>'توصية','website'=>'الموقع','social'=>'التواصل','advertising'=>'إعلان','other'=>'أخرى'];foreach($data['by_source'] as $s): ?><tr><td><?= $sources[$s['source']]??$s['source'] ?></td><td><span class="badge badge-info"><?= $s['count'] ?></span></td></tr><?php endforeach; ?></tbody></table></div></div>
+</div>
+<div class="card mt-2"><div class="card-header"><h3>أفضل 10 عملاء (بالإيرادات)</h3></div><div class="card-body"><table class="data-table"><thead><tr><th>#</th><th>العميل</th><th>الإيرادات</th></tr></thead><tbody><?php foreach($data['top_clients'] as $i=>$c): ?><tr><td><?= $i+1 ?></td><td class="text-bold"><?= clean($c['name']) ?></td><td class="text-gold text-bold"><?= formatMoney($c['total']) ?></td></tr><?php endforeach; ?></tbody></table></div></div>
