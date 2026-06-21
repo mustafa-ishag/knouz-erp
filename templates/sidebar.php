@@ -6,7 +6,7 @@ $rbac = new RBAC();
 <aside class="sidebar">
     <!-- شعار النظام -->
     <div class="sidebar-brand">
-        <div class="sidebar-brand-logo">ك</div>
+        <img src="<?= BASE_URL ?>/assets/images/logo.png" alt="شعار النظام" style="max-height: 40px; width: auto; object-fit: contain;">
         <div class="sidebar-brand-text">
             <h1>كنوز الإنجاز</h1>
             <span>نظام إدارة الأعمال</span>
@@ -119,31 +119,38 @@ $rbac = new RBAC();
         <?php endif; ?>
         
         <!-- الموارد -->
-        <?php if ($rbac->hasAnyPermission(['employees.view', 'documents.view'])): ?>
+        <?php if ($rbac->hasPermission('employees.view')): ?>
         <div class="nav-section">
             <div class="nav-section-title">الموارد</div>
-            <?php if ($rbac->hasPermission('employees.view')): ?>
             <a href="<?= url('employees') ?>" class="nav-item <?= activeMenu('employees') ?>">
                 <i class="fas fa-user-tie"></i>
                 <span class="nav-text">الموظفين</span>
             </a>
-            <?php endif; ?>
-            <?php if ($rbac->hasPermission('documents.view')): ?>
-            <a href="<?= url('documents') ?>" class="nav-item <?= activeMenu('documents') ?>">
-                <i class="fas fa-folder-open"></i>
-                <span class="nav-text">المستندات</span>
-            </a>
-            <?php endif; ?>
         </div>
         <?php endif; ?>
         
-        <!-- التقارير والإعدادات -->
+        <!-- الخدمات الحكومية -->
         <div class="nav-section">
-            <div class="nav-section-title">النظام</div>
+            <div class="nav-section-title">الخدمات الحكومية</div>
+            <a href="<?= url('gov_subscriptions') ?>" class="nav-item <?= activeMenu('gov_subscriptions') ?>">
+                <i class="fas fa-landmark"></i>
+                <span class="nav-text">الاشتراكات الحكومية</span>
+            </a>
+            <?php if ($rbac->hasPermission('documents.view')): ?>
+            <a href="<?= url('documents') ?>" class="nav-item <?= activeMenu('documents') ?>">
+                <i class="fas fa-folder-open"></i>
+                <span class="nav-text">الرخص والشهادات</span>
+            </a>
+            <?php endif; ?>
             <a href="<?= url('renewals') ?>" class="nav-item <?= activeMenu('renewals') ?>">
                 <i class="fas fa-sync-alt"></i>
                 <span class="nav-text">مركز التجديدات</span>
             </a>
+        </div>
+        
+        <!-- التقارير والإعدادات -->
+        <div class="nav-section">
+            <div class="nav-section-title">النظام</div>
             <?php if ($rbac->hasPermission('reports.view')): ?>
             <a href="<?= url('reports') ?>" class="nav-item <?= activeMenu('reports') ?>">
                 <i class="fas fa-chart-bar"></i>

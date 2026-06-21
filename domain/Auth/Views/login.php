@@ -22,7 +22,7 @@
         <!-- بطاقة تسجيل الدخول -->
         <div class="login-card">
             <div class="login-logo">
-                <div class="logo-icon">ك</div>
+                <img src="<?= BASE_URL ?>/assets/images/logo.png" alt="شعار النظام" style="max-height: 80px; width: auto; object-fit: contain; margin-bottom: 10px;">
                 <h2>كنوز الإنجاز</h2>
                 <p>نظام إدارة العملاء والخدمات والأعمال</p>
             </div>

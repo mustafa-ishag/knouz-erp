@@ -36,7 +36,8 @@ spl_autoload_register(function ($className) {
         'Auth', 'Dashboard', 'Clients', 'Companies', 'Services',
         'ServiceOrders', 'SalesOpportunities', 'Quotations', 'Claims',
         'Invoices', 'Payments', 'Communications', 'Tasks', 'Employees',
-        'Documents', 'Notifications', 'Reports', 'Settings', 'Renewals'
+        'Documents', 'Notifications', 'Reports', 'Settings', 'Renewals',
+        'GovSubscriptions'
     ];
     
     foreach ($domains as $domain) {
@@ -212,6 +213,14 @@ $router->register('settings', 'toggle_user', 'SettingsController', 'toggleUser',
 
 // مركز التجديدات
 $router->register('renewals', 'index', 'RenewalController', 'index');
+
+// الاشتراكات الحكومية
+$router->register('gov_subscriptions', 'index', 'GovSubscriptionController', 'index');
+$router->register('gov_subscriptions', 'create', 'GovSubscriptionController', 'create');
+$router->register('gov_subscriptions', 'store', 'GovSubscriptionController', 'store');
+$router->register('gov_subscriptions', 'edit', 'GovSubscriptionController', 'edit');
+$router->register('gov_subscriptions', 'update', 'GovSubscriptionController', 'update');
+$router->register('gov_subscriptions', 'delete', 'GovSubscriptionController', 'delete');
 
 // API - بيانات الشركات حسب العميل
 $router->register('companies', 'by_client', 'CompanyController', 'byClient');

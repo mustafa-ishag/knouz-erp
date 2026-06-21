@@ -9,23 +9,23 @@
 /* === CSS Variables (Design Tokens) === */
 :root {
     /* الألوان الرئيسية */
-    --gold: #D4A853;
-    --gold-light: #E8C97A;
-    --gold-dark: #B8892E;
-    --gold-gradient: linear-gradient(135deg, #D4A853 0%, #E8C97A 50%, #D4A853 100%);
+    --gold: #176cb4;          /* أزرق الشعار (الأساسي) */
+    --gold-light: #4fa5e6;    /* أزرق فاتح */
+    --gold-dark: #0f4e85;     /* أزرق غامق */
+    --gold-gradient: linear-gradient(135deg, #176cb4 0%, #4fa5e6 50%, #176cb4 100%);
     
-    --navy: #1A2332;
-    --navy-light: #243447;
-    --navy-dark: #0F1923;
+    --navy: #0e2942;          /* كحلي مستوحى من الأزرق (للشريط الجانبي) */
+    --navy-light: #16426a;    /* كحلي فاتح */
+    --navy-dark: #071522;     /* كحلي غامق جداً */
     
-    --blue: #2C3E50;
-    --blue-light: #34495E;
-    --blue-dark: #1A252F;
+    --blue: #176cb4;
+    --blue-light: #4fa5e6;
+    --blue-dark: #0f4e85;
     
     /* ألوان الحالة */
-    --success: #27AE60;
-    --success-light: #2ECC71;
-    --success-bg: rgba(39, 174, 96, 0.1);
+    --success: #22ae82;       /* أخضر الشعار */
+    --success-light: #35d29f; /* أخضر فاتح */
+    --success-bg: rgba(34, 174, 130, 0.1);
     
     --warning: #F39C12;
     --warning-light: #F1C40F;
@@ -39,9 +39,9 @@
     --info-light: #5DADE2;
     --info-bg: rgba(52, 152, 219, 0.1);
     
-    --primary: #D4A853;
-    --primary-light: #E8C97A;
-    --primary-bg: rgba(212, 168, 83, 0.1);
+    --primary: #176cb4;       /* أزرق الشعار */
+    --primary-light: #4fa5e6;
+    --primary-bg: rgba(23, 108, 180, 0.1);
     
     --secondary: #95A5A6;
     --secondary-light: #BDC3C7;
@@ -50,19 +50,19 @@
     /* ألوان الخلفية */
     --bg-body: #F0F2F5;
     --bg-card: #FFFFFF;
-    --bg-sidebar: #1A2332;
+    --bg-sidebar: var(--navy);
     --bg-header: #FFFFFF;
     --bg-input: #F8F9FA;
     --bg-hover: #F0F2F5;
-    --bg-selected: rgba(212, 168, 83, 0.08);
+    --bg-selected: rgba(23, 108, 180, 0.08);
     
     /* ألوان النص */
     --text-primary: #2C3E50;
     --text-secondary: #7F8C8D;
     --text-light: #95A5A6;
     --text-white: #FFFFFF;
-    --text-dark: #1A2332;
-    --text-gold: #D4A853;
+    --text-dark: #0e2942;
+    --text-gold: #176cb4;
     
     /* الحدود */
     --border-color: #E8ECF1;
