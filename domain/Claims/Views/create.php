@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (clientSelect && clientSelect.value) {
         const companySelect = document.getElementById('company_id');
         companySelect.innerHTML = '<option value="">جاري التحميل...</option>';
-        fetch('/kn/public/?module=companies&action=by_client&client_id=' + clientSelect.value, {
+        fetch(BASE_URL + '/?module=companies&action=by_client&client_id=' + clientSelect.value, {
             headers: {'X-Requested-With': 'XMLHttpRequest'}
         })
         .then(r => r.json())

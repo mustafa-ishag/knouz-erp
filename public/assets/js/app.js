@@ -248,7 +248,7 @@ function loadCompanies(clientId, selectId) {
     
     select.innerHTML = '<option value="">جاري التحميل...</option>';
     
-    fetchAPI(`/kn/public/?module=companies&action=by_client&client_id=${clientId}`)
+    fetchAPI(`${BASE_URL}/?module=companies&action=by_client&client_id=${clientId}`)
         .then(data => {
             select.innerHTML = '<option value="">اختر الشركة</option>';
             if (data.companies) {
@@ -357,7 +357,7 @@ function recalcSubtotal() {
 function pollNotifications() {
     if (!document.querySelector('.header-icon[onclick*="toggleNotifications"]')) return;
     
-    fetchAPI('/kn/public/?module=notifications&action=get')
+    fetchAPI(`${BASE_URL}/?module=notifications&action=get`)
         .then(data => {
             if (data.unread_count > 0) {
                 const badge = document.querySelector('.notification-badge-count');

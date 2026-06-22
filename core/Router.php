@@ -50,7 +50,7 @@ class Router
         if ($module !== 'auth') {
             $auth = Auth::getInstance();
             if (!$auth->isLoggedIn()) {
-                header('Location: /kn/public/?module=auth&action=login');
+                header('Location: ' . BASE_URL . '/?module=auth&action=login');
                 exit;
             }
 
@@ -104,7 +104,7 @@ class Router
      */
     public static function url(string $module, string $action = 'index', array $params = []): string
     {
-        $url = "/kn/public/?module={$module}&action={$action}";
+        $url = BASE_URL . "/?module={$module}&action={$action}";
         foreach ($params as $key => $value) {
             $url .= "&{$key}=" . urlencode($value);
         }

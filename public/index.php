@@ -13,7 +13,11 @@ session_start();
 // تعريف المسار الأساسي
 define('BASE_PATH', dirname(__DIR__));
 define('PUBLIC_PATH', __DIR__);
-define('BASE_URL', '/kn/public');
+
+// تحديد BASE_URL تلقائياً حسب بيئة التشغيل
+$scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+$baseUrl = rtrim(dirname($scriptName), '/\\');
+define('BASE_URL', $baseUrl);
 
 // تحميل الملفات الأساسية
 require_once BASE_PATH . '/config/constants.php';

@@ -111,7 +111,7 @@ class FileUploader
      */
     public function getUrl(string $path): string
     {
-        return '/kn/public/' . $this->config['upload_path'] . $path;
+        return BASE_URL . '/' . $this->config['upload_path'] . $path;
     }
 
     /**

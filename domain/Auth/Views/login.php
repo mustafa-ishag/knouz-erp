@@ -6,8 +6,8 @@
     <title>تسجيل الدخول - كنوز الإنجاز</title>
     <meta name="description" content="تسجيل الدخول إلى نظام كنوز الإنجاز لإدارة الأعمال">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="/kn/public/assets/css/app.css">
-    <link rel="stylesheet" href="/kn/public/assets/css/pages.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/app.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/pages.css">
 </head>
 <body>
     <div class="login-page">

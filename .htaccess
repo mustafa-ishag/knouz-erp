@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# إذا لم يكن الملف موجوداً في public، تحويل الطلب إلى public
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]

@@ -1,5 +1,4 @@
 RewriteEngine On
-RewriteBase /kn/public/
 
 # Don't rewrite files or directories
 RewriteCond %{REQUEST_FILENAME} !-f

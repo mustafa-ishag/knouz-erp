@@ -13,8 +13,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="/kn/public/assets/css/app.css">
-    <link rel="stylesheet" href="/kn/public/assets/css/pages.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/app.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/pages.css">
     
     <?php if (isset($extraCss)): ?>
         <?php foreach ((array)$extraCss as $css): ?>
@@ -54,7 +54,8 @@
     </div>
     
     <!-- JavaScript -->
-    <script src="/kn/public/assets/js/app.js"></script>
+    <script>const BASE_URL = '<?= BASE_URL ?>';</script>
+    <script src="<?= BASE_URL ?>/assets/js/app.js"></script>
     
     <?php if (isset($extraJs)): ?>
         <?php foreach ((array)$extraJs as $js): ?>
