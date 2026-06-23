@@ -388,4 +388,73 @@ document.addEventListener('DOMContentLoaded', function() {
     if (searchInput && dataTable) {
         tableSearch('table-search', 'data-table');
     }
+
+    // === Hijri Date Toggle ===
+    initHijriDateToggle();
 });
+
+// === PDF Export ===
+function exportPDF() {
+    const content = document.querySelector('.card');
+    if (!content) return;
+    
+    const pageHeader = document.querySelector('.page-header');
+    const buttons = document.querySelectorAll('.page-actions, .no-print');
+    buttons.forEach(b => b.style.display = 'none');
+    
+    const opt = {
+        margin: [10, 10, 10, 10],
+        filename: document.title.replace(/[^\u0621-\u064Aa-zA-Z0-9\s]/g, '') + '.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    
+    html2pdf().set(opt).from(content).save().then(() => {
+        buttons.forEach(b => b.style.display = '');
+    });
+}
+
+// === Print Page ===
+function printPage() {
+    window.print();
+}
+
+// === Hijri/Gregorian Date Toggle ===
+function initHijriDateToggle() {
+    document.querySelectorAll('input[type="date"]').forEach(input => {
+        if (input.dataset.hijriInit) return;
+        input.dataset.hijriInit = '1';
+        
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;gap:4px;align-items:center;';
+        input.parentNode.insertBefore(wrapper, input);
+        wrapper.appendChild(input);
+        
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'btn btn-ghost btn-sm';
+        toggleBtn.style.cssText = 'padding:4px 8px;font-size:0.7rem;white-space:nowrap;min-width:auto;';
+        toggleBtn.innerHTML = '<i class="fas fa-calendar-alt"></i>';
+        toggleBtn.title = 'عرض التاريخ الهجري';
+        wrapper.appendChild(toggleBtn);
+        
+        const hijriDisplay = document.createElement('span');
+        hijriDisplay.style.cssText = 'font-size:0.75rem;color:var(--text-muted);white-space:nowrap;';
+        wrapper.appendChild(hijriDisplay);
+        
+        function updateHijriDisplay() {
+            if (!input.value) { hijriDisplay.textContent = ''; return; }
+            const d = new Date(input.value);
+            try {
+                hijriDisplay.textContent = d.toLocaleDateString('ar-SA-u-ca-islamic', { year: 'numeric', month: 'long', day: 'numeric' });
+            } catch(e) {
+                hijriDisplay.textContent = '';
+            }
+        }
+        
+        input.addEventListener('change', updateHijriDisplay);
+        updateHijriDisplay();
+    });
+}

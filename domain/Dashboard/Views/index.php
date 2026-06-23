@@ -33,10 +33,11 @@
         </div>
     </div>
     <div class="stat-card">
-        <div class="stat-card-icon orange"><i class="fas fa-spinner"></i></div>
+        <div class="stat-card-icon orange"><i class="fas fa-clipboard-list"></i></div>
         <div class="stat-card-info">
-            <div class="stat-card-value"><?= number_format($stats['open_orders']) ?></div>
-            <div class="stat-card-label">طلبات مفتوحة</div>
+            <div class="stat-card-value"><?= number_format($stats['total_orders']) ?></div>
+            <div class="stat-card-label">إجمالي الطلبات</div>
+            <div class="stat-card-trend"><i class="fas fa-spinner"></i> <?= number_format($stats['open_orders']) ?> مفتوحة</div>
         </div>
     </div>
     <div class="stat-card">
@@ -44,6 +45,14 @@
         <div class="stat-card-info">
             <div class="stat-card-value"><?= number_format($stats['completed_orders']) ?></div>
             <div class="stat-card-label">طلبات منجزة</div>
+            <div class="stat-card-trend up"><?= formatMoney($stats['completed_orders_value'], false) ?> ر.س</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(23,108,180,0.1);color:#176cb4;"><i class="fas fa-file-invoice-dollar"></i></div>
+        <div class="stat-card-info">
+            <div class="stat-card-value"><?= formatMoney($stats['open_orders_value'], false) ?></div>
+            <div class="stat-card-label">قيمة الطلبات المفتوحة</div>
         </div>
     </div>
     <div class="stat-card">

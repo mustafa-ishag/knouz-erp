@@ -58,6 +58,12 @@ class ServiceOrderController extends Controller
         if ($newStatus === 'completed' && $oldStatus !== 'completed') { $data['completed_date'] = date('Y-m-d H:i:s'); }
         $this->model->update($id, $data);
         if ($oldStatus !== $newStatus) { $this->model->addStatusHistory($id, $oldStatus, $newStatus, $this->input('status_notes'), $this->currentUser()['id']); }
+        // إنشاء مطالبة تلقائية عند الاكتمال
+        if ($newStatus === 'completed' && $oldStatus !== 'completed') {
+            $updatedOrder = $this->model->find($id);
+            $claim = $this->createClaimFromOrder($updatedOrder);
+            if ($claim) { $this->setFlash('info', "تم إنشاء مطالبة تلقائية رقم: {$claim['claim_number']}"); }
+        }
         $this->logActivity('update', 'orders', $id, "تحديث طلب: {$order['order_number']}");
         $this->setFlash('success', 'تم تحديث الطلب'); $this->redirect('orders', 'show', ['id' => $id]);
     }
@@ -79,4 +85,99 @@ class ServiceOrderController extends Controller
 
     public function history(): void { $this->show(); }
     public function import(): void { $this->setFlash('info', 'ميزة الاستيراد قيد التطوير'); $this->redirect('orders'); }
+
+    /**
+     * تحديث الحالة عبر AJAX
+     */
+    public function updateStatus(): void
+    {
+        if (!$this->isPost()) { $this->json(['success' => false, 'message' => 'طلب غير صالح']); return; }
+        
+        $id = (int)$this->input('id');
+        $newStatus = $this->input('status');
+        $order = $this->model->find($id);
+        
+        if (!$order) { $this->json(['success' => false, 'message' => 'الطلب غير موجود']); return; }
+        
+        $oldStatus = $order['status'];
+        $validStatuses = ['new','in_progress','pending_client','pending_government','completed','cancelled'];
+        if (!in_array($newStatus, $validStatuses)) { $this->json(['success' => false, 'message' => 'حالة غير صالحة']); return; }
+        
+        $data = ['status' => $newStatus];
+        if ($newStatus === 'completed' && $oldStatus !== 'completed') {
+            $data['completed_date'] = date('Y-m-d H:i:s');
+        }
+        
+        $this->model->update($id, $data);
+        
+        if ($oldStatus !== $newStatus) {
+            $this->model->addStatusHistory($id, $oldStatus, $newStatus, 'تحديث سريع من الجدول', $this->currentUser()['id']);
+        }
+        
+        $this->logActivity('update', 'orders', $id, "تحديث حالة طلب {$order['order_number']} إلى {$newStatus}");
+        
+        $response = ['success' => true, 'message' => 'تم تحديث الحالة بنجاح', 'claim_created' => false];
+        
+        // إنشاء مطالبة تلقائية عند الاكتمال
+        if ($newStatus === 'completed' && $oldStatus !== 'completed') {
+            $claim = $this->createClaimFromOrder($order);
+            if ($claim) {
+                $response['claim_created'] = true;
+                $response['claim_number'] = $claim['claim_number'];
+            }
+        }
+        
+        $this->json($response);
+    }
+
+    /**
+     * إنشاء مطالبة مالية من طلب خدمة مكتمل
+     */
+    private function createClaimFromOrder(array $order): ?array
+    {
+        // التحقق من عدم وجود مطالبة مسبقة لهذا الطلب
+        $existing = $this->db->fetch("SELECT id FROM claims WHERE order_id = ? AND deleted_at IS NULL", [$order['id']]);
+        if ($existing) return null;
+        
+        $claimModel = new Claim();
+        $claimNumber = $claimModel->generateNumber();
+        
+        $subtotal = (float)$order['price'];
+        $vatRate = 15;
+        $vatAmount = round($subtotal * $vatRate / 100, 2);
+        $total = $subtotal + $vatAmount;
+        
+        $claimData = [
+            'claim_number' => $claimNumber,
+            'client_id' => $order['client_id'],
+            'company_id' => $order['company_id'],
+            'order_id' => $order['id'],
+            'due_date' => date('Y-m-d', strtotime('+30 days')),
+            'claim_percentage' => 100,
+            'subtotal' => $subtotal,
+            'vat_rate' => $vatRate,
+            'vat_amount' => $vatAmount,
+            'total' => $total,
+            'paid_amount' => 0,
+            'status' => 'sent',
+            'notes' => "مطالبة تلقائية من طلب خدمة: {$order['order_number']}",
+            'created_by' => $this->currentUser()['id'],
+        ];
+        
+        $claimId = $claimModel->create($claimData);
+        
+        // إضافة بند المطالبة
+        $serviceName = $this->db->fetchColumn("SELECT name FROM services WHERE id = ?", [$order['service_id']]);
+        $this->db->insert('claim_items', [
+            'claim_id' => $claimId,
+            'description' => $serviceName ?: $order['description'],
+            'quantity' => 1,
+            'unit_price' => $subtotal,
+            'total' => $subtotal,
+        ]);
+        
+        $this->logActivity('create', 'claims', $claimId, "إنشاء مطالبة تلقائية: {$claimNumber} من طلب: {$order['order_number']}");
+        
+        return ['id' => $claimId, 'claim_number' => $claimNumber];
+    }
 }

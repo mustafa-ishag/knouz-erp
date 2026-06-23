@@ -18,8 +18,11 @@ $initIdx = ($quotation && !empty($quotation['items'])) ? count($quotation['items
                 <option value="<?= $c['id'] ?>" <?= ($quotation && $quotation['client_id']==$c['id'])?'selected':'' ?>><?= clean($c['name']) ?></option>
                 <?php endforeach; ?>
             </select></div>
-        <div class="form-group"><label class="form-label">الشركة</label>
-            <select name="company_id" class="form-control" id="company_id"><option value="">اختر الشركة</option></select></div>
+        <div class="form-group"><label class="form-label">الشركة / الشركات</label>
+            <select name="company_ids[]" class="form-control" id="company_id" multiple style="min-height:80px;">
+                <option value="" disabled>اختر شركة أو أكثر</option>
+            </select>
+            <small class="text-muted">يمكنك اختيار أكثر من شركة بالضغط على Ctrl</small></div>
     </div>
     <div class="form-row">
         <div class="form-group"><label class="form-label">تاريخ الاستحقاق</label><input type="date" name="due_date" class="form-control" value="<?= date('Y-m-d', strtotime('+30 days')) ?>"></div>
@@ -119,13 +122,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const clientSelect = document.querySelector('[name="client_id"]');
     if (clientSelect && clientSelect.value) {
         const companySelect = document.getElementById('company_id');
-        companySelect.innerHTML = '<option value="">جاري التحميل...</option>';
+        companySelect.innerHTML = '<option value="" disabled>جاري التحميل...</option>';
         fetch(BASE_URL + '/?module=companies&action=by_client&client_id=' + clientSelect.value, {
             headers: {'X-Requested-With': 'XMLHttpRequest'}
         })
         .then(r => r.json())
         .then(data => {
-            companySelect.innerHTML = '<option value="">اختر الشركة</option>';
+            companySelect.innerHTML = '';
             if (data.companies) {
                 data.companies.forEach(c => {
                     const opt = document.createElement('option');
@@ -138,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         })
-        .catch(() => { companySelect.innerHTML = '<option value="">اختر الشركة</option>'; });
+        .catch(() => { companySelect.innerHTML = '<option value="" disabled>اختر شركة أو أكثر</option>'; });
     }
 });
 </script>

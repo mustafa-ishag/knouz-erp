@@ -9,5 +9,10 @@
         <div class="form-group"><label class="form-label">الملف <span class="required">*</span></label><input type="file" name="file" class="form-control" required accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx"></div>
         <div class="form-group"><label class="form-label">تاريخ الانتهاء</label><input type="date" name="expiry_date" class="form-control"></div>
     </div>
+    <div class="form-row">
+        <div class="form-group"><label class="form-label">رقم الرخصة / المستند</label><input type="text" name="license_number" class="form-control" placeholder="رقم الرخصة أو المستند"></div>
+        <div class="form-group"><label class="form-label">تاريخ الإصدار</label><input type="date" name="issue_date" class="form-control"></div>
+    </div>
+    <div class="form-group"><label class="form-label">ملاحظات</label><textarea name="notes" class="form-control" rows="2" placeholder="ملاحظات إضافية"></textarea></div>
     <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> رفع المستند</button>
 </form></div></div>

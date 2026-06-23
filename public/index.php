@@ -95,6 +95,8 @@ $router->register('companies', 'edit', 'CompanyController', 'edit', ['companies.
 $router->register('companies', 'update', 'CompanyController', 'update', ['companies.edit']);
 $router->register('companies', 'delete', 'CompanyController', 'delete', ['companies.delete']);
 $router->register('companies', 'show', 'CompanyController', 'show', ['companies.view']);
+$router->register('companies', 'store_employee', 'CompanyController', 'storeEmployee', ['companies.edit']);
+$router->register('companies', 'delete_employee', 'CompanyController', 'deleteEmployee', ['companies.edit']);
 
 // الخدمات
 $router->register('services', 'index', 'ServiceController', 'index', ['services.view']);
@@ -114,6 +116,7 @@ $router->register('orders', 'delete', 'ServiceOrderController', 'delete', ['orde
 $router->register('orders', 'show', 'ServiceOrderController', 'show', ['orders.view']);
 $router->register('orders', 'history', 'ServiceOrderController', 'history', ['orders.view']);
 $router->register('orders', 'import', 'ServiceOrderController', 'import', ['orders.create']);
+$router->register('orders', 'update_status', 'ServiceOrderController', 'updateStatus', ['orders.edit']);
 
 // الفرص البيعية
 $router->register('opportunities', 'index', 'SalesOpportunityController', 'index', ['opportunities.view']);

@@ -22,6 +22,7 @@
             <div class="form-group"><label class="form-label">السعر الافتراضي</label><input type="number" name="default_price" class="form-control" value="0" step="0.01"></div>
             <div class="form-group"><label class="form-label">التكلفة</label><input type="number" name="default_cost" class="form-control" value="0" step="0.01"></div>
         </div>
+        <div class="form-group"><label class="form-label"><i class="fas fa-link"></i> رابط موقع الخدمة</label><input type="url" name="url" class="form-control" dir="ltr" placeholder="https://..."></div>
         <div class="form-group"><label class="form-label">المتطلبات</label><textarea name="requirements" class="form-control" rows="2" placeholder="المستندات أو المتطلبات اللازمة"></textarea></div>
         <div class="form-check mb-2"><input type="checkbox" name="is_active" value="1" checked id="is_active"><label for="is_active">خدمة نشطة</label></div>
         <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> حفظ</button>

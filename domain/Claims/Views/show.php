@@ -1,5 +1,5 @@
 <div class="page-header"><div><h1 class="page-title">مطالبة <?= clean($claim['claim_number']) ?></h1><p class="page-subtitle"><?= statusBadge($claim['status']) ?></p></div>
-    <div class="page-actions"><a href="<?= url('claims','edit',['id'=>$claim['id']]) ?>" class="btn btn-outline"><i class="fas fa-edit"></i> تعديل</a><button onclick="printPage()" class="btn btn-outline"><i class="fas fa-print"></i> طباعة</button>
+    <div class="page-actions"><a href="<?= url('claims','edit',['id'=>$claim['id']]) ?>" class="btn btn-outline"><i class="fas fa-edit"></i> تعديل</a><button onclick="printPage()" class="btn btn-outline"><i class="fas fa-print"></i> طباعة</button><button onclick="exportPDF()" class="btn btn-outline" style="background:#c0392b;color:#fff;border-color:#c0392b;"><i class="fas fa-file-pdf"></i> تصدير PDF</button>
     <a href="<?= url('payments','create',['claim_id'=>$claim['id']]) ?>" class="btn btn-success"><i class="fas fa-money-bill-wave"></i> تسجيل دفعة</a></div>
 </div>
 <div class="card"><div class="card-body">

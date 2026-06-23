@@ -6,7 +6,7 @@ class DocumentController extends Controller {
         if(!$this->isPost()||empty($_FILES['file'])){$this->redirect('documents');return;}
         $uploader=new FileUploader();$path=$uploader->upload($_FILES['file'],'documents');
         if(!$path){$this->setFlash('danger',$uploader->getErrors()[0] ?? 'فشل الرفع');$this->redirect('documents','upload');return;}
-        $this->db->insert('company_documents',['company_id'=>$this->input('company_id'),'document_type'=>$this->input('document_type'),'title'=>$this->input('title')?:$_FILES['file']['name'],'file_path'=>$path,'file_name'=>basename($path),'file_size'=>$_FILES['file']['size'],'expiry_date'=>$this->input('expiry_date')?:null,'uploaded_by'=>$this->currentUser()['id']]);
+        $this->db->insert('company_documents',['company_id'=>$this->input('company_id'),'document_type'=>$this->input('document_type'),'title'=>$this->input('title')?:$_FILES['file']['name'],'file_path'=>$path,'file_name'=>basename($path),'file_size'=>$_FILES['file']['size'],'expiry_date'=>$this->input('expiry_date')?:null,'license_number'=>$this->input('license_number')?:null,'issue_date'=>$this->input('issue_date')?:null,'notes'=>$this->input('notes'),'uploaded_by'=>$this->currentUser()['id']]);
         $this->setFlash('success','تم رفع المستند');$this->redirect('documents');
     }
     public function deleteDoc(): void {$id=(int)$this->query('id');$this->db->update('company_documents',['deleted_at'=>date('Y-m-d H:i:s')],'id=?',[$id]);$this->setFlash('success','تم الحذف');$this->redirect('documents');}

@@ -25,7 +25,7 @@ class ServiceController extends Controller
         if (!$this->isPost()) { $this->redirect('services'); return; }
         $v = new Validator($_POST); $v->required('name', 'الاسم')->required('category_id', 'التصنيف');
         if ($v->fails()) { $this->setFlash('danger', $v->firstError()); $this->redirect('services', 'create'); return; }
-        $data = ['category_id'=>$this->input('category_id'),'name'=>$this->input('name'),'description'=>$this->input('description'),'platform'=>$this->input('platform'),'execution_days'=>(int)$this->input('execution_days',3),'default_price'=>(float)$this->input('default_price',0),'default_cost'=>(float)$this->input('default_cost',0),'is_active'=>$this->input('is_active',1)?1:0,'requirements'=>$this->input('requirements')];
+        $data = ['category_id'=>$this->input('category_id'),'name'=>$this->input('name'),'description'=>$this->input('description'),'platform'=>$this->input('platform'),'url'=>$this->input('url'),'execution_days'=>(int)$this->input('execution_days',3),'default_price'=>(float)$this->input('default_price',0),'default_cost'=>(float)$this->input('default_cost',0),'is_active'=>$this->input('is_active',1)?1:0,'requirements'=>$this->input('requirements')];
         $id = $this->serviceModel->create($data);
         $this->logActivity('create', 'services', $id, "إضافة خدمة: {$data['name']}");
         $this->setFlash('success', 'تم إضافة الخدمة بنجاح'); $this->redirect('services');
@@ -44,7 +44,7 @@ class ServiceController extends Controller
     {
         if (!$this->isPost()) { $this->redirect('services'); return; }
         $id = (int)$this->input('id');
-        $data = ['category_id'=>$this->input('category_id'),'name'=>$this->input('name'),'description'=>$this->input('description'),'platform'=>$this->input('platform'),'execution_days'=>(int)$this->input('execution_days',3),'default_price'=>(float)$this->input('default_price',0),'default_cost'=>(float)$this->input('default_cost',0),'is_active'=>$this->input('is_active',0)?1:0,'requirements'=>$this->input('requirements')];
+        $data = ['category_id'=>$this->input('category_id'),'name'=>$this->input('name'),'description'=>$this->input('description'),'platform'=>$this->input('platform'),'url'=>$this->input('url'),'execution_days'=>(int)$this->input('execution_days',3),'default_price'=>(float)$this->input('default_price',0),'default_cost'=>(float)$this->input('default_cost',0),'is_active'=>$this->input('is_active',0)?1:0,'requirements'=>$this->input('requirements')];
         $this->serviceModel->update($id, $data);
         $this->logActivity('update', 'services', $id, "تعديل خدمة: {$data['name']}");
         $this->setFlash('success', 'تم تحديث الخدمة'); $this->redirect('services');

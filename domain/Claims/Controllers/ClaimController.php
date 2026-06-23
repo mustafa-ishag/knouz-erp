@@ -16,7 +16,10 @@ class ClaimController extends Controller {
 
     public function store(): void {
         if (!$this->isPost()) { $this->redirect('claims'); return; }
-        $data = ['claim_number'=>$this->model->generateNumber(),'client_id'=>$this->input('client_id'),'company_id'=>$this->input('company_id')?:null,'quotation_id'=>$this->input('quotation_id')?:null,'due_date'=>$this->input('due_date')?:date('Y-m-d',strtotime('+30 days')),'claim_percentage'=>(float)$this->input('claim_percentage',100),'subtotal'=>(float)$this->input('subtotal',0),'vat_rate'=>(float)$this->input('vat_rate',15),'vat_amount'=>(float)$this->input('vat_amount',0),'total'=>(float)$this->input('total',0),'paid_amount'=>0,'status'=>'draft','notes'=>$this->input('notes'),'created_by'=>$this->currentUser()['id']];
+        $companyIds = $_POST['company_ids'] ?? [];
+        $companyIds = array_filter($companyIds);
+        $primaryCompanyId = !empty($companyIds) ? $companyIds[0] : ($this->input('company_id') ?: null);
+        $data = ['claim_number'=>$this->model->generateNumber(),'client_id'=>$this->input('client_id'),'company_id'=>$primaryCompanyId,'company_ids'=>!empty($companyIds)?json_encode($companyIds):null,'quotation_id'=>$this->input('quotation_id')?:null,'due_date'=>$this->input('due_date')?:date('Y-m-d',strtotime('+30 days')),'claim_percentage'=>(float)$this->input('claim_percentage',100),'subtotal'=>(float)$this->input('subtotal',0),'vat_rate'=>(float)$this->input('vat_rate',15),'vat_amount'=>(float)$this->input('vat_amount',0),'total'=>(float)$this->input('total',0),'paid_amount'=>0,'status'=>'draft','notes'=>$this->input('notes'),'created_by'=>$this->currentUser()['id']];
         $id = $this->model->create($data);
         if (!empty($_POST['items'])) { $this->model->saveItems($id, $_POST['items']); }
         $this->logActivity('create','claims',$id,"إنشاء مطالبة: {$data['claim_number']}");

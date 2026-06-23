@@ -55,6 +55,8 @@
     
     <!-- JavaScript -->
     <script>const BASE_URL = '<?= BASE_URL ?>';</script>
+    <!-- html2pdf for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="<?= BASE_URL ?>/assets/js/app.js"></script>
     
     <?php if (isset($extraJs)): ?>

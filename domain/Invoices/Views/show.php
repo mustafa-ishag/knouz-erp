@@ -1,6 +1,6 @@
 <?php /* عرض الفاتورة - مطابق لعرض المطالبة */ ?>
 <div class="page-header"><div><h1 class="page-title">فاتورة <?= clean($invoice['invoice_number']) ?></h1><p class="page-subtitle"><?= statusBadge($invoice['status']) ?></p></div>
-    <div class="page-actions"><a href="<?= url('invoices','edit',['id'=>$invoice['id']]) ?>" class="btn btn-outline"><i class="fas fa-edit"></i> تعديل</a><button onclick="printPage()" class="btn btn-outline"><i class="fas fa-print"></i> طباعة</button>
+    <div class="page-actions"><a href="<?= url('invoices','edit',['id'=>$invoice['id']]) ?>" class="btn btn-outline"><i class="fas fa-edit"></i> تعديل</a><button onclick="printPage()" class="btn btn-outline"><i class="fas fa-print"></i> طباعة</button><button onclick="exportPDF()" class="btn btn-outline" style="background:#c0392b;color:#fff;border-color:#c0392b;"><i class="fas fa-file-pdf"></i> تصدير PDF</button>
     <a href="<?= url('payments','create',['invoice_id'=>$invoice['id']]) ?>" class="btn btn-success"><i class="fas fa-money-bill-wave"></i> تسجيل دفعة</a></div></div>
 <div class="card"><div class="card-body">
     <div class="d-flex justify-between mb-3" style="flex-wrap:wrap;gap:16px;"><div><h2 style="font-size:1.75rem;font-weight:800;color:var(--gold);"><?= clean($settings['company_name_ar']??'كنوز الإنجاز') ?></h2></div><div style="text-align:left;"><h3 style="font-size:1.25rem;font-weight:700;">فاتورة ضريبية</h3><p class="text-sm"><?= clean($invoice['invoice_number']) ?></p></div></div>

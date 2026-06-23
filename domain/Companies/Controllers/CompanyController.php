@@ -94,9 +94,23 @@ class CompanyController extends Controller
         $id = (int)$this->query('id');
         $company = $this->companyModel->find($id);
         if (!$company) { $this->setFlash('danger', 'الشركة غير موجودة'); $this->redirect('companies'); return; }
+        
         $company['client'] = $this->db->fetch("SELECT * FROM clients WHERE id = ?", [$company['client_id']]);
         $company['documents'] = $this->companyModel->getDocuments($id);
-        $company['orders'] = $this->db->fetchAll("SELECT so.*, s.name as service_name FROM service_orders so LEFT JOIN services s ON so.service_id = s.id WHERE so.company_id = ? AND so.deleted_at IS NULL ORDER BY so.created_at DESC LIMIT 10", [$id]);
+        $company['orders'] = $this->db->fetchAll("SELECT so.*, s.name as service_name FROM service_orders so LEFT JOIN services s ON so.service_id = s.id WHERE so.company_id = ? AND so.deleted_at IS NULL ORDER BY so.created_at DESC LIMIT 20", [$id]);
+        $company['claims'] = $this->db->fetchAll("SELECT cl.* FROM claims cl WHERE cl.company_id = ? AND cl.deleted_at IS NULL ORDER BY cl.created_at DESC LIMIT 20", [$id]);
+        $company['employees'] = $this->db->fetchAll("SELECT * FROM company_employees WHERE company_id = ? ORDER BY name", [$id]);
+        $company['gov_subscriptions'] = $this->db->fetchAll("SELECT * FROM gov_subscriptions WHERE company_id = ? AND deleted_at IS NULL ORDER BY created_at DESC", [$id]);
+        
+        // إحصائيات الشركة
+        $company['stats'] = [
+            'total_orders' => $this->db->count('service_orders', "company_id = ? AND deleted_at IS NULL", [$id]),
+            'completed_orders' => $this->db->count('service_orders', "company_id = ? AND status = 'completed' AND deleted_at IS NULL", [$id]),
+            'total_revenue' => $this->db->fetchColumn("SELECT COALESCE(SUM(price), 0) FROM service_orders WHERE company_id = ? AND status = 'completed' AND deleted_at IS NULL", [$id]) ?: 0,
+            'pending_amount' => $this->db->fetchColumn("SELECT COALESCE(SUM(total - paid_amount), 0) FROM claims WHERE company_id = ? AND status IN ('sent','due','overdue') AND deleted_at IS NULL", [$id]) ?: 0,
+            'employees_count' => count($company['employees']),
+        ];
+        
         $pageTitle = $company['name_ar'];
         $breadcrumbs = [['title' => 'الشركات', 'url' => url('companies')], ['title' => $company['name_ar']]];
         $this->render('domain/Companies/Views/show.php', compact('pageTitle', 'breadcrumbs', 'company'));
@@ -109,4 +123,43 @@ class CompanyController extends Controller
         $companies = $this->companyModel->getByClient($clientId);
         $this->json(['companies' => $companies]);
     }
+
+    /**
+     * إضافة موظف للشركة
+     */
+    public function storeEmployee(): void
+    {
+        if (!$this->isPost()) { $this->redirect('companies'); return; }
+        $companyId = (int)$this->input('company_id');
+        $data = [
+            'company_id' => $companyId,
+            'name' => $this->input('name'),
+            'position' => $this->input('position'),
+            'phone' => $this->input('phone'),
+            'email' => $this->input('email'),
+            'id_number' => $this->input('id_number'),
+            'notes' => $this->input('notes'),
+        ];
+        $this->db->insert('company_employees', $data);
+        $this->logActivity('create', 'company_employees', $companyId, "إضافة موظف: {$data['name']}");
+        $this->setFlash('success', 'تم إضافة الموظف بنجاح');
+        $this->redirect('companies', 'show', ['id' => $companyId]);
+    }
+
+    /**
+     * حذف موظف
+     */
+    public function deleteEmployee(): void
+    {
+        $id = (int)$this->query('id');
+        $emp = $this->db->fetch("SELECT * FROM company_employees WHERE id = ?", [$id]);
+        if ($emp) {
+            $this->db->query("DELETE FROM company_employees WHERE id = ?", [$id]);
+            $this->setFlash('success', 'تم حذف الموظف');
+            $this->redirect('companies', 'show', ['id' => $emp['company_id']]);
+        } else {
+            $this->redirect('companies');
+        }
+    }
 }
+
